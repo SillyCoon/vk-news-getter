@@ -1,10 +1,10 @@
-const easyvk = require('easyvk')
+const easyvk = require('easyvk');
 
 easyvk({
     username: '89119191032',
     password: 'lisaandalex112',
     session_file: __dirname + '/.my-session'
-}).then(async vk => {
+}).then(async (vk: any) => {
 
     /*
       Этот код сначала авторизует вас по логину и паролю,
