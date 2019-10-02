@@ -1,6 +1,8 @@
+import { Source } from './model/source';
 const easyvk = require('easyvk');
 import { SOURCES } from './sources';
-import { RedisClient } from 'redis';
+import { createClient, print } from 'redis';
+import { News } from './model/news';
 
 easyvk({
     username: '89119191032',
@@ -8,21 +10,29 @@ easyvk({
     session_file: __dirname + '/.my-session'
 }).then(async (vk: any) => {
 
-    /*
-      Этот код сначала авторизует вас по логину и паролю,
-      а затем отправит текстовое сообщение вам
-    */
+    // https://github.com/NodeRedis/node_redis
+    const redisClient = createClient();
+    redisClient.get("key", (error, value) => console.log(value));
 
-    // делаем запрос на GET api.vk.com/method/messages.send
+    SOURCES.forEach(async (sourceId: string) => {
 
-    SOURCES.forEach(async (source: string) => {
-        const { vkr } = await vk.call('wall.get', {
-            owner_id: source,
+        // https://vk.com/dev/wall.get
+        const { response } = await vk.call('wall.get', {
+            owner_id: sourceId,
             count: 5,
-            filter: 'ovner'
+            filter: 'owner'
         });
 
-        const result = { id: source, texts: vkr.items.map((item: any) => item.text)} ;
-        console.log(result);
+        const source = {
+            id: sourceId,
+            news: response.items.map((item: any) => {
+                return {
+                    text: item.text,
+                    date: item.date
+                } as News
+            })
+        } as Source
+
+        console.log(source);
     });
 })

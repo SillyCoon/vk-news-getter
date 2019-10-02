@@ -1,3 +1,4 @@
+// ids of groups
 export const SOURCES = [
-    '-15755094',
+    '-76982440',
 ];
