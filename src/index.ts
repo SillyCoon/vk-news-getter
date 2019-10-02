@@ -1,4 +1,6 @@
 const easyvk = require('easyvk');
+import { SOURCES } from './sources';
+import { RedisClient } from 'redis';
 
 easyvk({
     username: '89119191032',
@@ -12,13 +14,15 @@ easyvk({
     */
 
     // делаем запрос на GET api.vk.com/method/messages.send
-    let { vkr } = await vk.call('wall.get', {
-        owner_id: -15755094,
-        count: 5
+
+    SOURCES.forEach(async (source: string) => {
+        const { vkr } = await vk.call('wall.get', {
+            owner_id: source,
+            count: 5,
+            filter: 'ovner'
+        });
+
+        const result = { id: source, texts: vkr.items.map((item: any) => item.text)} ;
+        console.log(result);
     });
-
-
-    // выводим ответ сервера
-    console.log(vkr);
-
 })
