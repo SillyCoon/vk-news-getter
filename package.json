@@ -1,27 +1,14 @@
 {
-  "name": "vk-news-loader",
+  "name": "new-news-getter",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run build:live",
-    "build": "tsc -p .",
-    "build:live": "nodemon --watch '/src/**/*.ts' --exec \"ts-node\" src/index.ts"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/redis": "^2.8.14",
-    "easyvk": "^2.5.1",
-    "redis": "^2.8.0",
-    "tslib": "^1.10.0"
-  },
-  "devDependencies": {
-    "@types/node": "^12.7.8",
-    "nodemon": "^1.19.3",
-    "ts-node": "^8.4.1",
-    "typescript": "^3.6.3"
+    "easyvk": "^2.5.11"
   }
 }
