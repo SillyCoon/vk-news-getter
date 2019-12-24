@@ -60,8 +60,8 @@ function mapResponseToSource(response, sourceId) {
         response.vkr.items.map((item) =>
             ({
                 id: sourceId,
-                text: item.text,
-                date: item.date
+                text: item.text.replace(/\n/g, '').replace(/,/g, ''),
+                date: new Date(item.date * 1000).toISOString()
             })
         )
     return source;
