@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "easyvk": "^2.5.11"
+    "easyvk": "^2.5.11",
+    "csv-writer": "1.5.0"
   }
 }

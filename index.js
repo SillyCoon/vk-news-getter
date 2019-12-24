@@ -1,5 +1,6 @@
 const easyvk = require('easyvk');
 const fs = require('fs');
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 const SOURCE_IDS = [
     '-23303030',
@@ -19,6 +20,12 @@ const SOURCE_IDS = [
     '-61920119',
 ];
 
+const csvHeader = [
+    { id: 'id', title: "ID" },
+    { id: 'date', title: "Date" },
+    { id: 'text', title: "Text" }
+]
+
 easyvk({
     username: '89119191032',
     password: 'lisaandalex112',
@@ -27,14 +34,14 @@ easyvk({
     // https://vk.com/dev/wall.get
     SOURCE_IDS.forEach(async (sourceId, i) => {
         if (i % 5 === 0) {
-            setTimeout( async () => {
+            setTimeout(async () => {
                 const response = await vk.call('wall.get', {
                     owner_id: sourceId,
                     count: 100000,
                     filter: 'owner'
                 });
                 const source = mapResponseToSource(response, sourceId);
-                writeToFile(source, sourceId);
+                writeToCSV(source, sourceId);
             }, 10000);
         } else {
             const response = await vk.call('wall.get', {
@@ -43,22 +50,30 @@ easyvk({
                 filter: 'owner'
             });
             const source = mapResponseToSource(response, sourceId);
-            writeToFile(source, sourceId);
+            writeToCSV(source, sourceId);
         }
     });
 });
 
 function mapResponseToSource(response, sourceId) {
-    const source = {
-        id: sourceId,
-        news: response.vkr.items.map((item) =>
+    const source =
+        response.vkr.items.map((item) =>
             ({
+                id: sourceId,
                 text: item.text,
                 date: item.date
             })
         )
-    }
     return source;
+}
+
+function writeToCSV(source, id) {
+    const writer = createCsvWriter({
+        path: `output/csv/${id}.csv`,
+        header: csvHeader
+    });
+
+    writer.writeRecords(source).then(() => console.log(`${id}.scv записан`));
 }
 
 function writeToFile(source, id) {
